@@ -1,0 +1,25 @@
+@import url("https://fonts.googleapis.com/css2?family=Oswald&display=swap");
+
+:root {
+    --bluePrimary: #00a8ff;
+    --black: #000000;
+    --white: #ffffff;
+    --grey: #808080; /* Gris */
+    --blackLight: #333333; /* Noir légèrement plus clair */
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: "Oswald", arial, serif;
+    overflow-x: hidden;
+}
