@@ -5,13 +5,16 @@ import {connect, useDispatch} from "react-redux";
 import HomeScreen from "./Screens/Home/HomeScreen";
 import DetailScreen from "./Screens/Welcome/DetailScreen";
 import TemplateScreen from "./Screens/Template/TemplateScreen";
+import AdminScreen from "./Screens/Welcome/AdminScreen";
 
 function FarmMarket(props) {
-    const isAuthenticated = !!props.Logger.user && !!props.Logger.token && (props.Logger.userId !== null);
+    const isAuthenticated = !!props.Logger.token && (props.Logger.userId !== null);
 
     const routes = [
-        { path: "/", element: isAuthenticated ? <Navigate to="/controls" /> : <TemplateScreen><WelcomeScreen /></TemplateScreen> },
-        { path: "/details", element: isAuthenticated ? <Navigate to="/controls" /> : <TemplateScreen><DetailScreen /></TemplateScreen> },
+        { path: "/", element: isAuthenticated ? <Navigate to="/home" /> : <TemplateScreen><WelcomeScreen /></TemplateScreen> },
+        { path: "/details", element: isAuthenticated ? <Navigate to="/home" /> : <TemplateScreen><DetailScreen /></TemplateScreen> },
+        { path: "/admin", element: isAuthenticated ? <Navigate to="/home" /> : <AdminScreen /> },
+        { path: "/home", element: isAuthenticated ? <HomeScreen /> : <AdminScreen /> },
     ];
 
     return (
@@ -20,11 +23,12 @@ function FarmMarket(props) {
                 {routes.map(route => (
                     <Route key={route.path} path={route.path} element={route.element} />
                 ))}
-                <Route path="*" element={isAuthenticated ? <Navigate to="/controls" /> : <TemplateScreen><HomeScreen /></TemplateScreen>} />
+                <Route path="*" element={isAuthenticated ? <Navigate to="/home" /> : <TemplateScreen><WelcomeScreen /></TemplateScreen>} />
             </Routes>
         </BrowserRouter>
     );
 }
+
 
 const mapStateToProps = (state) => {
     return state

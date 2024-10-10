@@ -47,9 +47,13 @@ class GetUserController extends AbstractController
 
         try {
             $userArray = $this->entityManager->getRepository(User::class)->find($id);
-            $idSearch = $userArray->getId();
+
+            if (!$userArray) {
+                return new JsonResponse(["message" => "Utilisateur non trouvé."], Response::HTTP_NOT_FOUND);
+            }
+
+            
             $idUser = $this->user->getId();
-            dump($idUser, $idSearch);
 
             
             return new JsonResponse($this->userController->getInformationUser($userArray));

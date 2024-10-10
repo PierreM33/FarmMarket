@@ -1,51 +1,46 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import BlockBody from "../../Components/Body/BlockBody";
-import {logout} from "../../Redux/actions/authActions";
-import BlockMenu from "../../Components/Menu/BlockMenu";
 
-const HomeScreen = ({ dispatch, Logger, children  }) => {
+const HomeScreen = ({ }) => {
 
+    const [step, setStep] = useState(1);
 
-    const [title, setTitle] = useState("Accueil")
-    const menus = [
-        {
-            title: 'JOUEURS',
-            menuItems: [
-                { link: '/controls', text: 'Accueil' },
-                { link: '/logout', text: 'Déconnexion' },
-            ],
-        },
-        {
-            title: 'ADMINISTRATION',
-            menuItems: [
-                { link: '/members', text: 'Gestion des Membres' },
-            ],
-        },
-    ];
-
-    const handleLogout = () => { //PEUT RENVOYER SUR L'ACCUEIL MAIS PAS NECESSAIRE CAR GERER PAR NAVIGATION
-        dispatch(logout());
+    const handleAddAnimalClick = () => {
+        setStep(1);
     };
 
-    const onClickMenu = (state) => {
-        setTitle(state)
+    const handleEditAnimalClick = () => {
+        setStep(2);
+    };
+
+    const renderButton = (text, onClick) => {
+        return (
+            <button onClick={onClick}>{text}</button>
+        );
     }
 
-
     return (
-
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', backgroundColor: "var(--black)" }}>
-            <div style={{ display: 'flex', flex: 1, backgroundColor: 'black' }}>
-                <div style={{flexDirection: 'column', display: 'flex', paddingTop: "5%", width: 200, alignItems: "center"}}>
-                    {menus.map((menu, index) => (
-                        <BlockMenu key={index} title={menu.title} menuItems={menu.menuItems} handleLogout={handleLogout} onClickMenu={onClickMenu} />
-                    ))}
-                </div>
-                <BlockBody children={children} title={title} />
+        <section className={"HomeContainer"}>
+            <h1>Bienvenue dans le Back Office</h1>
+            <div>
+                {renderButton("Ajouter un animal", handleAddAnimalClick)}
+                {renderButton("Éditer un animal", handleEditAnimalClick)}
             </div>
-        </div>
 
+            {step === 1 && (
+                <div className="add-animal-container">
+                    <h2>Ajouter un animal</h2>
+                    <p>Formulaire d'ajout d'animal ici...</p>
+                </div>
+            )}
+
+            {step === 2 && (
+                <div className="edit-animal-container">
+                    <h2>Éditer un animal</h2>
+                    <p>Formulaire d'édition d'animal ici...</p>
+                </div>
+            )}
+        </section>
     );
 };
 
@@ -64,4 +59,3 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
-

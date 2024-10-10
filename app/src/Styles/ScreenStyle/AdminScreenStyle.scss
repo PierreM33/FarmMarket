@@ -1,0 +1,79 @@
+.containerAdmin {
+  background-color: var(--blackLight);
+  width:100vw;
+  height:100vh;
+  display: flex;
+  justify-content: center;
+    align-items: center;
+}
+
+
+.auth-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; // Pour centrer verticalement
+}
+
+.auth-form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 300px; // Largeur fixe pour le formulaire
+}
+
+.auth-form h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.auth-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--greenFarm);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.auth-form button:hover {
+  background-color: var(--yellowSun);
+}
+
+.auth-logs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+  cursor: pointer;
+}
+
+.auth-a {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.auth-a:hover {
+    color: var(--greenFarm);
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+}
+
+.success-message {
+    color: green;
+    text-align: center;
+}

@@ -22,9 +22,18 @@ docker-compose up --build
 ### 2. Initialisation de la base de données
 
 Pour initialiser la base de données, exécuter les commandes suivantes :
+Commencez par entrer dans le container php:
 
 ```bash
+docker exec -it "numeroContainer" /bin/sh
+```
+
+Optionnel: 
+```bash
 php bin/console doctrine:database:create
+```
+
+```bash
 php bin/console make:migration
 php bin/console doctrine:migrations:migrate
 ```
@@ -64,6 +73,8 @@ composer install
 ```bash
 php bin/console server:run
 ```
+
+
 
 ## Accès
 
