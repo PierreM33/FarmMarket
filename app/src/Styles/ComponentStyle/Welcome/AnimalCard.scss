@@ -1,0 +1,58 @@
+.animal-card {
+  display: flex;
+  border-radius: 20px;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  width: 40%;
+  margin: 10px;
+  background-size: cover;
+  background-position: center;
+  height: 250px;
+  position: relative;
+  cursor: pointer;
+}
+
+.animal-button {
+  background-color: var(--greenFarm);
+  color: var(--white);
+  cursor: pointer;
+  position: absolute;
+  padding: 10px;
+  border-radius: 5px;
+  width: 20%;
+  bottom: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.47);
+}
+
+.animal-card:hover {
+  transform: scale(1.05);
+  transition: transform 0.5s;
+}
+
+.animal-button:hover {
+  background-color: var(--yellowSun);
+}
+
+.bottom-left {
+  right: 15px;
+}
+
+.bottom-right {
+  left: 15px;
+}
+
+@media (max-width: 768px) {
+  .animal-card {
+    width: 90%;
+    margin: 10px auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  .animal-button {
+    width: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

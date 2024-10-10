@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../../styles/notifications.scss';
+import '../../Styles/notifications.scss';
 
 const Notifications = ({ message, isVisibleNotification, setIsVisibleNotification, success }) => {
 

@@ -1,0 +1,30 @@
+.containerTemplate {
+  background-color: var(--blackLight);
+  width:100vw;
+  height:100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.childrenTemplate {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.headerTemplate{
+  padding: 15px;
+  width: 100%;
+  color: var(--white);
+  z-index: 2;
+  border-bottom: 2px solid var(--greenFarm);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.footerTemplate {
+  padding: 10px;
+  background-color: var(--blackLight);
+  color: var(--greenFarm);
+  text-align: center;
+}
+

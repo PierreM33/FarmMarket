@@ -1,7 +1,7 @@
 
 services:
   database:
-    container_name: database
+    container_name: databaseTech
     image: mysql:8.0
     command: --default-authentication-plugin=mysql_native_password
     environment:
@@ -15,9 +15,8 @@ services:
     ports:
       - "3306:3306"
 
-#Changement du contexte, pour avoir package.json et le Dockerfile dans le même dossier j'ai changé app/node
   node:
-    container_name: node
+    container_name: nodeTech
     build:
         context: ./app
     ports:
@@ -28,7 +27,7 @@ services:
 
 
   nginx:
-    container_name: nginx
+    container_name: nginxTech
     image: nginx:stable-alpine
     ports:
       - '80:80'
@@ -44,7 +43,7 @@ services:
 
 
   php:
-    container_name: php
+    container_name: phpTech
     build:
       context: docker/php
     ports:
@@ -56,9 +55,8 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
 
-      # Nouveau service pour phpMyAdmin
   phpmyadmin:
-    container_name: phpmyadmin
+    container_name: phpmyadminTech
     image: phpmyadmin/phpmyadmin
     environment:
        PMA_ARBITRARY: 1

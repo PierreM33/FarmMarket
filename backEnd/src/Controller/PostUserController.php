@@ -58,7 +58,7 @@ class PostUserController extends AbstractController
             return new JsonResponse("success", Response::HTTP_CREATED);
         } catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) {
             $this->entityManager->rollback();
-            var_dump($e->getMessage()); // Ajoutez cette ligne pour afficher le message d'erreur
+            var_dump($e->getMessage());
 
             return new JsonResponse("L'utilisateur avec cet e-mail existe déjà.", Response::HTTP_BAD_REQUEST);
         } catch (\Exception $e) {
