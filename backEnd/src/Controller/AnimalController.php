@@ -51,23 +51,49 @@ class AnimalController extends AbstractController
      */
     public function addAnimal(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
-        
-        $animal = new Animal();
-        $animal->setName($data['name']);
-        $animal->setAge($data['age']);
-        $animal->setType($data['type']);
-        $animal->setBreed($data['breed']);
-        $animal->setDescription($data['description']);
-        $animal->setPriceTTC($data['priceTTC']);
-        $animal->setStatus($data['status']);
+        try {
+            // Récupérer les données du formulaire
+            $name = $request->request->get('name');
+            $age = $request->request->get('age');
+            $type = $request->request->get('type');
+            $breed = $request->request->get('breed');
+            $description = $request->request->get('description');
+            $priceTTC = $request->request->get('priceTTC');
+            $status = $request->request->get('status');
 
-        $this->entityManager->persist($animal);
-        $this->entityManager->flush();
+            // Validation des données requises
+            if (empty($name) || empty($age) || empty($type) || empty($breed) || empty($description) || empty($priceTTC) || empty($status)) {
+                return new JsonResponse(['error' => 'Tous les champs sont requis.'], Response::HTTP_BAD_REQUEST);
+            }
 
-        return new JsonResponse(['message' => 'Animal ajouté avec succès', 'id' => $animal->getId()], Response::HTTP_CREATED);
-    
+            // Création de l'animal
+            $animal = new Animal();
+            $animal->setName($name);
+            $animal->setAge($age);
+            $animal->setType($type);
+            $animal->setBreed($breed);
+            $animal->setDescription($description);
+            $animal->setPriceTTC($priceTTC);
+            $animal->setStatus($status);
+
+            // Gestion de l'upload de la photo
+            if ($photoFile = $request->files->get('photo')) {
+                $photoPath = uniqid() . '.' . $photoFile->guessExtension();
+                $photoFile->move($this->getParameter('photos_directory'), $photoPath);
+                $animal->setPhotoPath($photoPath);
+            }
+
+            // Persist et flush
+            $this->entityManager->persist($animal);
+            $this->entityManager->flush();
+
+            return new JsonResponse(['message' => 'Animal ajouté avec succès', 'id' => $animal->getId()], Response::HTTP_CREATED);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
+
+
 
     /**
      * @Route("/api/animals/{id}", name="update_animal", methods={"PUT"})

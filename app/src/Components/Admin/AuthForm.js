@@ -49,6 +49,7 @@ const AuthForm = ({ type, onClick, setType, onValidate }) => {
             }
 
             const data = { email, password };
+
             const response = await Login(setLoading, data);
 
             if (response) {

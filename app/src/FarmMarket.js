@@ -6,9 +6,22 @@ import HomeScreen from "./Screens/Home/HomeScreen";
 import DetailScreen from "./Screens/Welcome/DetailScreen";
 import TemplateScreen from "./Screens/Template/TemplateScreen";
 import AdminScreen from "./Screens/Welcome/AdminScreen";
+import {isTokenExpired} from "./jwtToken";
 
 function FarmMarket(props) {
-    const isAuthenticated = !!props.Logger.token && (props.Logger.userId !== null);
+
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+        console.log("props.Logger", props.Logger)
+        const token = props.Logger?.token;
+
+        if (token && !isTokenExpired(token) && props.Logger.userId !== null) {
+            setIsAuthenticated(true);
+        } else {
+            setIsAuthenticated(false);
+        }
+    }, [props.Logger]);
 
     const routes = [
         { path: "/", element: isAuthenticated ? <Navigate to="/home" /> : <TemplateScreen><WelcomeScreen /></TemplateScreen> },

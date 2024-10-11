@@ -78,7 +78,7 @@ php bin/console server:run
 
 ## Accès
 
-- Front-end : [http://localhost:3000](http://localhost:3000)
+- Front-end : [http://localhost:3001](http://localhost:3001)
 - Back-end : [http://localhost:8000](http://localhost:8000)
 - PhpMyAdmin : [http://localhost:8081](http://localhost:8081)
 

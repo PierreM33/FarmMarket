@@ -4,10 +4,6 @@ export default function AxiosInstance(Logger = null) {
 
     const axiosApi = axios.create({
         baseURL: "http://127.0.0.1:8080",
-        //timeout: 10000
-        // headers: {
-        //     'Accept': 'application/json',
-        // }
     })
 
     axiosApi.interceptors.request.use(
