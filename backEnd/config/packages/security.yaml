@@ -42,6 +42,7 @@ security:
     access_control:
         # Permet l'accès public à /api/createUser
         - { path: ^/api/createUser, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/public/animals, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         # Restreint l'accès aux autres routes /api aux utilisateurs authentifiés
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 

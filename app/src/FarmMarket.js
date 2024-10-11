@@ -13,7 +13,7 @@ function FarmMarket(props) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        console.log("props.Logger", props.Logger)
+
         const token = props.Logger?.token;
 
         if (token && !isTokenExpired(token) && props.Logger.userId !== null) {

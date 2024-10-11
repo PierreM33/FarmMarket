@@ -39,7 +39,6 @@ class AnimalRepository extends ServiceEntityRepository
         }
     }
 
-    // Ajoutez des méthodes personnalisées ici si nécessaire
 
     /**
      * @return Animal[] Returns an array of Animal objects

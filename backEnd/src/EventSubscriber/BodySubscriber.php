@@ -35,14 +35,21 @@ class BodySubscriber implements EventSubscriberInterface
     public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
-
+    
         if (empty($request->getContent())) {
             return;
         }
-
+    
         if (in_array($request->getContentType(), [null, 'json', 'txt'], true)) {
-            $request->request->replace(json_decode($request->getContent(), true));
+            $decodedData = json_decode($request->getContent(), true);
+    
+            // Vérifie que le décodage n'a pas échoué et que le résultat est un tableau
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decodedData)) {
+                $request->request->replace($decodedData);
+            } else {
+                error_log('Erreur de décodage JSON : ' . json_last_error_msg());
+            }
         }
-
     }
+    
 }

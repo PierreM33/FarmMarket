@@ -4,9 +4,9 @@ import {Login} from "../../Api/Login";
 
 const AuthForm = ({ type, onClick, setType, onValidate }) => {
 
-    const [email, setEmail] = useState('membre@example.com');
-    const [password, setPassword] = useState('membre');
-    const [confirmPassword, setConfirmPassword] = useState('membre');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
@@ -98,7 +98,14 @@ const AuthForm = ({ type, onClick, setType, onValidate }) => {
                 {successMessage && <p className="success-message">{successMessage}</p>}
                 {renderButton()}
                 <div className={"auth-logs"}>
-                    <a onClick={onClick} className={"auth-a"}>
+                    <a
+                        onClick={ () => {
+                            if (!loading) {
+                                onClick();
+                            }
+                        }}
+                       className={"auth-a"}
+                    >
                         {type === 0 ? 'Déjà un compte ? Connectez-vous' : 'Pas encore de compte ? Inscrivez-vous'}
                     </a>
                 </div>

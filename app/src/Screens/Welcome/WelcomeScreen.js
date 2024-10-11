@@ -18,7 +18,6 @@ const WelcomeScreen = ({  }) => {
 
     useEffect(() => {
         if (selectedAnimal) {
-            //REDIRECT TO DETAILS
             navigate('/details');
         }
     }, [selectedAnimal]);
@@ -28,14 +27,23 @@ const WelcomeScreen = ({  }) => {
     };
 
     return (
-        <div className="containerWelcome">
-            {animals.map(animal => (
-                <AnimalCard
-                    key={animal.id}
-                    item={animal}
-                    handleButtonClick={(state) => {handleButtonClick(state)}}
-                />
-            ))}
+        <div className="container-welcome">
+            <div className={"container-welcome-text"}>
+                <div className={"textH1"}>Bienvenue sur notre plateforme de vente de bétail</div>
+                <p>Découvrez nos animaux disponibles à la vente. Que vous cherchiez une brebis douce ou un animal d'élevage, nous avons ce qu'il vous faut !</p>
+                <div className={"contact-info"}>
+                    <span>Contactez-nous au 06 36 06 90 36</span>
+                </div>
+            </div>
+            <div className={"container-welcome-image"}>
+                {animals.map(animal => (
+                    <AnimalCard
+                        key={animal.id}
+                        item={animal}
+                        handleButtonClick={(state) => {handleButtonClick(state)}}
+                    />
+                ))}
+            </div>
         </div>
     );
 };

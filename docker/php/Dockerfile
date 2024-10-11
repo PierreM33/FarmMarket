@@ -4,8 +4,8 @@ FROM php:8.1-fpm
 RUN apt-get update && apt-get install -y \
     default-mysql-client \
     zlib1g-dev g++ git libicu-dev zip libzip-dev wget \
-    libonig-dev \  # Ajouté ici
-  && rm -rf /var/lib/apt/lists/* \
+    libonig-dev \
+  && rm -rf /var/lib/apt/lists/*
 
 # Installe les extensions PHP nécessaires et les modules PECL
 RUN docker-php-ext-install intl opcache pdo pdo_mysql \

@@ -38,7 +38,7 @@ class AnimalController extends AbstractController
                 'type' => $animal->getType(),
                 'breed' => $animal->getBreed(),
                 'description' => $animal->getDescription(),
-                'price' => $animal->getPrice(),
+                'price' => $animal->getPriceTTC(),
                 'status' => $animal->getStatus(),
             ];
         }
@@ -52,7 +52,7 @@ class AnimalController extends AbstractController
     public function addAnimal(Request $request): JsonResponse
     {
         try {
-            // Récupérer les données du formulaire
+            
             $name = $request->request->get('name');
             $age = $request->request->get('age');
             $type = $request->request->get('type');
@@ -61,7 +61,7 @@ class AnimalController extends AbstractController
             $priceTTC = $request->request->get('priceTTC');
             $status = $request->request->get('status');
 
-            // Validation des données requises
+            // Validation des données requises (photo n'est plus inclus)
             if (empty($name) || empty($age) || empty($type) || empty($breed) || empty($description) || empty($priceTTC) || empty($status)) {
                 return new JsonResponse(['error' => 'Tous les champs sont requis.'], Response::HTTP_BAD_REQUEST);
             }
@@ -76,14 +76,14 @@ class AnimalController extends AbstractController
             $animal->setPriceTTC($priceTTC);
             $animal->setStatus($status);
 
-            // Gestion de l'upload de la photo
+            // Gestion de l'upload de la photo 
             if ($photoFile = $request->files->get('photo')) {
                 $photoPath = uniqid() . '.' . $photoFile->guessExtension();
                 $photoFile->move($this->getParameter('photos_directory'), $photoPath);
                 $animal->setPhotoPath($photoPath);
             }
 
-            // Persist et flush
+        
             $this->entityManager->persist($animal);
             $this->entityManager->flush();
 
@@ -96,27 +96,74 @@ class AnimalController extends AbstractController
 
 
     /**
-     * @Route("/api/animals/{id}", name="update_animal", methods={"PUT"})
+     * @Route("/api/animals/{id}", name="update_animal", methods={"POST"})
      */
     public function updateAnimal(Request $request, $id): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
         $animal = $this->animalRepository->find($id);
 
         if (!$animal) {
             return new JsonResponse(['message' => 'Animal non trouvé'], Response::HTTP_NOT_FOUND);
         }
 
-        $animal->setName($data['name'] ?? $animal->getName());
-        $animal->setAge($data['age'] ?? $animal->getAge());
-        $animal->setType($data['type'] ?? $animal->getType());
-        $animal->setBreed($data['breed'] ?? $animal->getBreed());
-        $animal->setDescription($data['description'] ?? $animal->getDescription());
-        $animal->setPrice($data['priceTTC'] ?? $animal->getPrice());
-        $animal->setStatus($data['status'] ?? $animal->getStatus());
+        // Récupérer les données du formulaire
+        $name = $request->request->get('name', $animal->getName());
+        $age = $request->request->get('age', $animal->getAge());
+        $type = $request->request->get('type', $animal->getType());
+        $breed = $request->request->get('breed', $animal->getBreed());
+        $description = $request->request->get('description', $animal->getDescription());
+        $priceTTC = $request->request->get('priceTTC', $animal->getPriceTTC());
+        $status = $request->request->get('status', $animal->getStatus());
+
+        // Validation de l'âge
+        if ($age < 0) {
+            return new JsonResponse(['message' => 'L\'âge doit être un nombre positif'], Response::HTTP_BAD_REQUEST);
+        }
+
+        // Mettre à jour les propriétés de l'animal
+        $animal->setName($name);
+        $animal->setAge($age);
+        $animal->setType($type);
+        $animal->setBreed($breed);
+        $animal->setDescription($description);
+        $animal->setPriceTTC($priceTTC);
+        $animal->setStatus($status);
+
+        // Gestion de l'upload de la photo (si nécessaire)
+        if ($photoFile = $request->files->get('photo')) {
+            $photoPath = uniqid() . '.' . $photoFile->guessExtension();
+            $photoFile->move($this->getParameter('photos_directory'), $photoPath);
+            $animal->setPhotoPath($photoPath);
+        }
 
         $this->entityManager->flush();
 
         return new JsonResponse(['message' => 'Animal mis à jour avec succès']);
     }
+
+    /**
+     * @Route("/api/public/animals", name="get_public_animals", methods={"GET"}) 
+     */
+    public function getPublicAnimals(): JsonResponse 
+    {
+        $animals = $this->animalRepository->findAll();
+        $data = [];
+
+        foreach ($animals as $animal) {
+            $data[] = [
+                'id' => $animal->getId(),
+                'name' => $animal->getName(),
+                'age' => $animal->getAge(),
+                'type' => $animal->getType(),
+                'breed' => $animal->getBreed(),
+                'description' => $animal->getDescription(),
+                'price' => $animal->getPriceTTC(),
+                'status' => $animal->getStatus(),
+            ];
+        }
+
+        return new JsonResponse($data);
+    }
+
+
 }

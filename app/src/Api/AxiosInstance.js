@@ -23,11 +23,9 @@ export default function AxiosInstance(Logger = null) {
 
     axiosApi.interceptors.response.use(
         (response) => {
-            // console.log("REPONSE", response)
             return response.data
         },
         (error) => {
-            console.log("ERREUR", error)
             return Promise.reject(error)
         }
     )

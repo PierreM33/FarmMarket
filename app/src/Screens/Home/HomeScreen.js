@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import AddAnimalModal from "../../Components/Home/AddAnimalModal";
 import {logout} from "../../Redux/actions/authActions";
+import UserList from "../../Components/Home/UserList";
+import AnimalList from "../../Components/Home/AnimalList";
 
 const HomeScreen = ({ Logger,dispatch }) => {
 
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(2);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
 
@@ -49,16 +51,9 @@ const HomeScreen = ({ Logger,dispatch }) => {
                 {renderButton("Voir les administrateurs", handleAdminlClick)}
             </div>
 
-            {step === 1 && (
-                <AddAnimalModal isOpen={isModalOpen} setIsModalOpen={setIsModalOpen} Logger={Logger} />
-            )}
-
-            {step === 2 && (
-                <div className="edit-animal-container">
-                    <h2>Éditer un animal</h2>
-                    <p>Formulaire d'édition d'animal ici...</p>
-                </div>
-            )}
+            {step === 1 && <AddAnimalModal isOpen={isModalOpen} setIsModalOpen={setIsModalOpen} Logger={Logger} />}
+            {step === 2 &&  <AnimalList Logger={Logger} edit={true} filteredAnimals={[]} />}
+            {step === 3 && <UserList Logger={Logger}/>}
         </section>
     );
 };

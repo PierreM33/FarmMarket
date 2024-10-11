@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import {addAnimal} from "../../Api/Animals";
+import React, { useEffect, useState } from 'react';
+import {updateAnimal} from "../../Api/Animals";
 
-const AddAnimalModal = ({ isOpen, setIsModalOpen, Logger }) => {
+const EditAnimalModal = ({ isOpen, setIsModalOpen, Logger, animal, reload }) => {
 
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
@@ -10,9 +10,25 @@ const AddAnimalModal = ({ isOpen, setIsModalOpen, Logger }) => {
     const [description, setDescription] = useState('');
     const [priceTTC, setPriceTTC] = useState('');
     const [status, setStatus] = useState('en vente');
+    const [disabled, setDisabled] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [photo, setPhoto] = useState(null);
 
+    useEffect(() => {
+        if (animal) {
+            setName(animal.name);
+            setAge(animal.age);
+            setType(animal.type);
+            setBreed(animal.breed);
+            setDescription(animal.description);
+            setPriceTTC(animal.price);
+            setStatus(animal.status);
+        }
+    }, [animal]);
+
+    useEffect(() => {
+        const isAnyFieldEmpty = !name || !age || !type || !breed || !description || !priceTTC;
+        setDisabled(isAnyFieldEmpty);
+    }, [name, age, type, breed, description, priceTTC]);
 
 
     const handleSubmit = async (e) => {
@@ -23,7 +39,7 @@ const AddAnimalModal = ({ isOpen, setIsModalOpen, Logger }) => {
             return;
         }
 
-        const newAnimal = {
+        const updatedAnimal = {
             name,
             age,
             type,
@@ -33,33 +49,21 @@ const AddAnimalModal = ({ isOpen, setIsModalOpen, Logger }) => {
             status,
         };
 
-        const result = await addAnimal(setLoading, newAnimal, Logger);
 
-        if (typeof result === "string") {
-            alert(result);
-            return;
+        const result = await updateAnimal(Logger, setLoading, animal.id, updatedAnimal);
+
+        if (result.message === 'Animal mis à jour avec succès') {
+            alert(result.message);
         } else {
-            alert("Animal ajouté avec succès !");
+            alert("Erreur lors de la mise à jour de l'animal");
         }
+        reload();
         handleCloseModal();
-        resetForm();
     };
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
-        resetForm()
     };
-
-    const resetForm = () => {
-        setName('');
-        setAge('');
-        setType('');
-        setBreed('');
-        setDescription('');
-        setPriceTTC('');
-        setStatus('en vente');
-        setLoading(false)
-    }
 
     const handleAgeChange = (value) => {
         const newValue = parseInt(value, 10);
@@ -80,18 +84,19 @@ const AddAnimalModal = ({ isOpen, setIsModalOpen, Logger }) => {
             <button
                 className={"template-button"}
                 onClick={onClick}
-                disabled={loading}
+                disabled={disabled || loading}
             >
-                {loading ? "Chargement..." : text}
+                {(disabled || loading) ? "Chargement..." : text}
             </button>
         );
-    }
+    };
 
-    const renderInput = (label, value, onChange, type) => {
+    const renderInput = (label, value, onChange, type, placeholder) => {
         return (
             <div>
                 <label>{label}:</label>
                 <input
+                    placeholder={placeholder}
                     type={type}
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
@@ -100,22 +105,7 @@ const AddAnimalModal = ({ isOpen, setIsModalOpen, Logger }) => {
                 />
             </div>
         );
-    }
-
-    const renderFileInput = (label, value, onChange) => {
-        return (
-            <div>
-                <label>{label}:</label>
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => onChange(e.target.files[0])}
-                    required
-                />
-            </div>
-        );
     };
-
 
     if (!isOpen) {
         return null;
@@ -124,15 +114,14 @@ const AddAnimalModal = ({ isOpen, setIsModalOpen, Logger }) => {
     return (
         <div className="modal-overlay">
             <div className="modal-content">
-                <div className={"modal-title"}>Ajouter un animal</div>
+                <div className={"modal-title"}>Modifier un animal</div>
                 <form className="add-animal-form" onSubmit={handleSubmit}>
-                    {renderInput("Nom", name, setName, "text")}
-                    {renderInput("Âge", age, handleAgeChange, "number")}
-                    {renderInput("Type d'animal", type, setType, "text")}
-                    {renderInput("Race", breed, setBreed, "text")}
-                    {renderInput("Description", description, setDescription, "text")}
-                    {renderInput("Prix TTC", priceTTC, handlePriceChange, "number")}
-                    {/*{renderFileInput("Photo", photo, setPhoto)}*/}
+                    {renderInput("Nom", name, setName, "text", animal.name)}
+                    {renderInput("Âge", age, handleAgeChange, "number", animal.age)}
+                    {renderInput("Type d'animal", type, setType, "text", animal.type)}
+                    {renderInput("Race", breed, setBreed, "text", animal.breed)}
+                    {renderInput("Description", description, setDescription, "text", animal.description)}
+                    {renderInput("Prix TTC", priceTTC, handlePriceChange, "number", animal.price)}
                     <div>
                         <label>Status:</label>
                         <select value={status} onChange={(e) => setStatus(e.target.value)}>
@@ -140,7 +129,7 @@ const AddAnimalModal = ({ isOpen, setIsModalOpen, Logger }) => {
                             <option value="vendu">Vendu</option>
                         </select>
                     </div>
-                    {renderButton("Ajouter", () => {})}
+                    {renderButton("Mettre à jour", () => {})}
                     {!loading && renderButton("Annuler", handleCloseModal)}
                 </form>
             </div>
@@ -148,4 +137,4 @@ const AddAnimalModal = ({ isOpen, setIsModalOpen, Logger }) => {
     );
 };
 
-export default AddAnimalModal;
+export default EditAnimalModal;
